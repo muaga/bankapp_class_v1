@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- 반드시 세미콜론 생략 -->
+<mapper
+	namespace="com.tenco.bankapp.repository.interfaces.AccountRepository">
+
+	<insert id="insert">
+		insert into account_tb(number, password, balance, user_id, created_at)
+		values(#{number}, #{password}, #{balance}, #{userId}, now())
+	</insert>
+
+	<update id="updateById">
+		update account_tb 
+		set number = #{number}, password = #{password}, balance	= #{balance}, userId = #{userId}
+		where id = #{id}
+	</update>
+
+	<delete id="deleteById">
+		delete from account_tb where id = #{id}
+	</delete>
+	
+	<!-- 사용자 1명 -->
+	<select id="findById" resultType="com.tenco.bankapp.repository.entity.Account">
+		select * from account_tb where id = #{id}
+	</select>
+
+	<!-- 사용자 전체 -->
+	<!-- 자동으로 List로 return 해줌 -->
+	<select id="findAll" resultType="com.tenco.bankapp.repository.entity.Account">
+		select * from account_tb
+	</select>
+
+</mapper>
