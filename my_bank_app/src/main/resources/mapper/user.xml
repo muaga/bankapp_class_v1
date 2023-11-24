@@ -30,5 +30,10 @@
 	<select id="findAll" resultType="com.tenco.bankapp.repository.entity.User">
 		select * from user_tb
 	</select>
+	
+	<!-- 사용자의 username과 password로 조회 -->
+	<select id="findByUsernameAndPassword" resultType="com.tenco.bankapp.repository.entity.User">
+		select * from user_tb where username = #{username} and password = #{password}
+	</select>
 
 </mapper>
