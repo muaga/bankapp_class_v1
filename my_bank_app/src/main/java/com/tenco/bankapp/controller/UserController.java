@@ -14,6 +14,7 @@ import com.tenco.bankapp.dto.SignUpFormDto;
 import com.tenco.bankapp.handler.exception.CustomRestfullException;
 import com.tenco.bankapp.repository.entity.User;
 import com.tenco.bankapp.service.UserService;
+import com.tenco.bankapp.utils.Define;
 
 @Controller
 @RequestMapping("/user")
@@ -24,7 +25,7 @@ public class UserController {
 	private UserService userService;
 	
 	@Autowired
-	private HttpSession httpSession;
+	private HttpSession session;
 
 	// 생성자주입으로 DI 처리
 //	public UserController(UserService userService) {
@@ -92,11 +93,17 @@ public class UserController {
 
 		// 3. session 등록
 		// was에 session 영역(쿠키 + 세션)이 있다. 여기에 user에 대한 정보를 넣는다.
-		httpSession.setAttribute("principal", principal);
+		session.setAttribute(Define.PRINCIPAL, principal);
 		
 		System.out.println("principal" + principal.toString());
 		
 		return "/account/list";
+	}
+	
+	@GetMapping("/logout")
+	public String logout() {
+		session.invalidate();
+		return "redirect:/user/sign-in";
 	}
 
 }
