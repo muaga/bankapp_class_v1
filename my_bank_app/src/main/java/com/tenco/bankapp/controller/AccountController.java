@@ -92,7 +92,7 @@ public class AccountController {
 		// 3. 핵심 로직
 		accountService.createAccount(dto, principal.getId());
 		
-		return "account/list";
+		return "redirect:/account/list";
 	}
 	
 	
