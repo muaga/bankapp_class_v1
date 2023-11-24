@@ -59,13 +59,13 @@ public class UserController {
 
 		// 1. 유효성 검사
 		if (dto.getUsername() == null || dto.getUsername().isEmpty()) {
-			throw new CustomRestfullException("username을 입력하세요", HttpStatus.BAD_REQUEST);
+			throw new CustomRestfullException("username을 입력해주세요", HttpStatus.BAD_REQUEST);
 		}
 		if (dto.getPassword() == null || dto.getPassword().isEmpty()) {
-			throw new CustomRestfullException("password을 입력하세요", HttpStatus.BAD_REQUEST);
+			throw new CustomRestfullException("password을 입력해주세요", HttpStatus.BAD_REQUEST);
 		}
 		if (dto.getFullname() == null || dto.getFullname().isEmpty()) {
-			throw new CustomRestfullException("fullname을 입력하세요", HttpStatus.BAD_REQUEST);
+			throw new CustomRestfullException("fullname을 입력해주세요", HttpStatus.BAD_REQUEST);
 		}
 
 		// 2. 핵심 로직
@@ -82,10 +82,10 @@ public class UserController {
 		
 		// 1. 유효성 검사
 		if(dto.getUsername() == null || dto.getUsername().isEmpty()) {
-			throw new CustomRestfullException("username을 입력하시요", HttpStatus.BAD_REQUEST);
+			throw new CustomRestfullException("username을 입력해주세요", HttpStatus.BAD_REQUEST);
 		}
 		if(dto.getPassword() == null || dto.getPassword().isEmpty()) {
-			throw new CustomRestfullException("username을 입력하시요", HttpStatus.BAD_REQUEST);
+			throw new CustomRestfullException("username을 입력해주세요", HttpStatus.BAD_REQUEST);
 		}
 		
 		// 2. 핵심 로직
@@ -97,7 +97,7 @@ public class UserController {
 		
 		System.out.println("principal" + principal.toString());
 		
-		return "/account/list";
+		return "redirect:/account/list";
 	}
 	
 	@GetMapping("/logout")

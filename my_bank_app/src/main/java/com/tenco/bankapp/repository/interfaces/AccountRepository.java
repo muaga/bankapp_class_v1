@@ -22,7 +22,7 @@ public interface AccountRepository {
 	public List<Account> findAll();
 
 	// User 정보로 계좌 리스트를 출력
-	//	public List<Account> findByUserId(Integer principalId);
+	public List<Account> findByUserId(Integer principalId);
 
 	// 계좌번호로 계좌 조회
 	//	public Account findByNumber(String number);
