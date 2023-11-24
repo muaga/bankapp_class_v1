@@ -1,5 +1,7 @@
 package com.tenco.bankapp.controller;
 
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
@@ -7,18 +9,23 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import com.tenco.bankapp.dto.SignInFormDto;
 import com.tenco.bankapp.dto.SignUpFormDto;
 import com.tenco.bankapp.handler.exception.CustomRestfullException;
+import com.tenco.bankapp.repository.entity.User;
 import com.tenco.bankapp.service.UserService;
 
 @Controller
 @RequestMapping("/user")
 public class UserController {
-	
+
 	// 어노테이션으로 DI 처리
 	@Autowired
 	private UserService userService;
 	
+	@Autowired
+	private HttpSession httpSession;
+
 	// 생성자주입으로 DI 처리
 //	public UserController(UserService userService) {
 //		this.userService = userService;
@@ -49,7 +56,7 @@ public class UserController {
 	// get요청과 다른 요청이기 때문에 엔드포인트가 같아도 된다.
 	public String signUpProc(SignUpFormDto dto) {
 
-		// 1. 유효성검사
+		// 1. 유효성 검사
 		if (dto.getUsername() == null || dto.getUsername().isEmpty()) {
 			throw new CustomRestfullException("username을 입력하세요", HttpStatus.BAD_REQUEST);
 		}
@@ -59,13 +66,37 @@ public class UserController {
 		if (dto.getFullname() == null || dto.getFullname().isEmpty()) {
 			throw new CustomRestfullException("fullname을 입력하세요", HttpStatus.BAD_REQUEST);
 		}
-		
+
 		// 2. 핵심 로직
 		int resultRowCount = userService.signUp(dto);
-		if(resultRowCount != 1) {
+		if (resultRowCount != 1) {
 			// 다른 처리
 		}
-		
+
 		return "redirect:/user/sign-in";
 	}
+	
+	@PostMapping("/sign-in")
+	public String signInProc(SignInFormDto dto) {
+		
+		// 1. 유효성 검사
+		if(dto.getUsername() == null || dto.getUsername().isEmpty()) {
+			throw new CustomRestfullException("username을 입력하시요", HttpStatus.BAD_REQUEST);
+		}
+		if(dto.getPassword() == null || dto.getPassword().isEmpty()) {
+			throw new CustomRestfullException("username을 입력하시요", HttpStatus.BAD_REQUEST);
+		}
+		
+		// 2. 핵심 로직
+		User principal = userService.signIn(dto);
+
+		// 3. session 등록
+		// was에 session 영역(쿠키 + 세션)이 있다. 여기에 user에 대한 정보를 넣는다.
+		httpSession.setAttribute("principal", principal);
+		
+		System.out.println("principal" + principal.toString());
+		
+		return "/account/list";
+	}
+
 }

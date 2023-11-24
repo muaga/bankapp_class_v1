@@ -13,8 +13,8 @@ public class AccountController {
 	
 	// 임시 예외 발생 확인
 	// http://localhost:80/account/list
-	@GetMapping("/list")
-	public void list() {
-		throw new CustomPageException("페이지가 없어요", HttpStatus.NOT_FOUND);
+	@GetMapping({"/list", "/"})
+	public String list() {
+		return "account/list";
 	}
 }
