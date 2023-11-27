@@ -1,5 +1,9 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<!-- headerPage에 User를 import해서 user의 객체를 사용할 수 있다. -->
+<%@ page import="com.tenco.bankapp.repository.entity.User" %>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -30,12 +34,21 @@
       <li class="nav-item">
         <a class="nav-link" href="/">Home</a>
       </li>
-      <li class="nav-item">
-        <a class="nav-link" href="/user/sign-in">SignIn</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" href="/user/sign-up">SignUp</a>
-      </li>    
+      <c:choose>
+	      <c:when test="${principal != null}">
+	            <li class="nav-item">
+		        	<a class="nav-link" href="/user/logout">logout</a>
+      			</li>
+	      </c:when>
+	      <c:otherwise>
+	            <li class="nav-item">
+        			<a class="nav-link" href="/user/sign-in">SignIn</a>
+      			</li>
+      			<li class="nav-item">
+        			<a class="nav-link" href="/user/sign-up">SignUp</a>
+      			</li>  
+	      </c:otherwise>
+      </c:choose>  
     </ul>
   </div>  
 </nav>

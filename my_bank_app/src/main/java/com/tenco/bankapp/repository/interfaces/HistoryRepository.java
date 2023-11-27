@@ -2,17 +2,24 @@ package com.tenco.bankapp.repository.interfaces;
 
 import java.util.List;
 
+import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
 import com.tenco.bankapp.repository.entity.History;
 
+@Mapper
 public interface HistoryRepository {
 
 	// 거래 내역 등록
 	public int insert(History history);
+	public int updateById(History history);
+	public int deleteById(Integer id);
+	public List<History> findAll();
+	public List<History> findByIdAndDynamicType(@Param("type") String type, @Param("id") Integer id);
+
 	
 	// 거래 내역 조회
-	public List<History> findByAccountNumber(String accountNumber);
+//	public List<History> findByAccountNumber(String accountNumber);
 	
 	// 동적 쿼리 생성
 //	public List<History> findByIdAndDynamicType(@Param("type") String type, @Param("id") Integer id);
