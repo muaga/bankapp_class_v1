@@ -20,7 +20,7 @@
 						<!-- 반복문이 들어가야 함 -->
 						<c:forEach var="account" items="${accountList}">
 							<tr>
-								<td>${account.number}</td>
+								<td><a href="/account/detail/${account.id}">${account.number}</a></td>
 								<td>${account.balance}</td>
 							</tr>
 						</c:forEach>

@@ -15,14 +15,13 @@ public interface HistoryRepository {
 	public int updateById(History history);
 	public int deleteById(Integer id);
 	public List<History> findAll();
-	public List<History> findByIdAndDynamicType(@Param("type") String type, @Param("id") Integer id);
 
 	
 	// 거래 내역 조회
 //	public List<History> findByAccountNumber(String accountNumber);
 	
 	// 동적 쿼리 생성
-//	public List<History> findByIdAndDynamicType(@Param("type") String type, @Param("id") Integer id);
+	public List<History> findByIdAndDynamicType(@Param("type") String type, @Param("accountId") Integer accountId);
 	// history에는 입금 / 출금 / 전체 내역이 존재
 	// 하나의 쿼리로 입금 / 출금 / 전체 내역을 각 조건에 맞게 출력하기 위해
 	// key 값을 설정한다. = @Param(동적 매개변수)

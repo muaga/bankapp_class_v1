@@ -17,6 +17,8 @@ import com.tenco.bankapp.repository.entity.History;
 import com.tenco.bankapp.repository.interfaces.AccountRepository;
 import com.tenco.bankapp.repository.interfaces.HistoryRepository;
 
+import lombok.Data;
+
 @Service // IoC 대상 + 싱글톤 관리
 public class AccountService {
 
@@ -31,7 +33,6 @@ public class AccountService {
 	 * 계좌 생성 기능
 	 * 
 	 * @param dto
-	 * 
 	 * @param principalId
 	 */
 
@@ -121,19 +122,19 @@ public class AccountService {
 
 		// 1. 계좌 존재 여부 조회 -> select
 		Account accountEntity = accountRepository.findByNumber(dto.getDAccountNumber());
-		if(accountEntity == null) {
+		if (accountEntity == null) {
 			throw new CustomRestfullException("해당 계좌가 없습니다", HttpStatus.BAD_REQUEST);
 		}
-		
+
 		// 2. 본인 계좌 여부 확인 -> select
-		if(accountEntity.getUserId() != principalId) {
+		if (accountEntity.getUserId() != principalId) {
 			throw new CustomRestfullException("본인 소유 계좌가 아닙니다", HttpStatus.UNAUTHORIZED);
 		}
-		
+
 		// 3. 입금 처리 -> update
 		accountEntity.deposit(dto.getAmount());
 		accountRepository.updateById(accountEntity);
-		
+
 		// 4. 거래 내역 등록(history) -> insert
 		History history = new History();
 		history.setAmount(dto.getAmount());
@@ -143,11 +144,11 @@ public class AccountService {
 		history.setDAccountId(accountEntity.getId());
 		// ==========> 입금 내역
 		int resultRowCount = historyRepository.insert(history);
-		if(resultRowCount != 1) {
+		if (resultRowCount != 1) {
 			throw new CustomRestfullException("정상 처리가 되지 않았습니다", HttpStatus.BAD_REQUEST);
 		}
 	}
-	
+
 	// 이체 기능 로직 고민해보기
 	// 1. 계좌 존재 여부 조회 -> 출금계좌, 입금계좌 select
 	// 2. 본인 계좌 여부 확인 -> select
@@ -158,17 +159,17 @@ public class AccountService {
 	// 7. 트랜잭션 처리
 	@Transactional
 	public void updateAccountTransfer(TransferFormDto dto, Integer principalId) {
-		
+
 		// 1. 계좌 존재 여부 조회 -> 출금계좌, 이체계좌 select
 		Account wAccountEntity = accountRepository.findByNumber(dto.getWAccountNumber());
-		if(wAccountEntity == null) {
+		if (wAccountEntity == null) {
 			throw new CustomRestfullException("출금 계좌가 없습니다", HttpStatus.BAD_REQUEST);
 		}
 		Account dAccountEntity = accountRepository.findByNumber(dto.getDAccountNumber());
-		if(dAccountEntity == null) {
+		if (dAccountEntity == null) {
 			throw new CustomRestfullException("입금 계좌가 없습니다", HttpStatus.BAD_REQUEST);
 		}
-		
+
 		// 2. 본인 계좌 여부 확인 -> select
 		wAccountEntity.checkOwner(principalId);
 //		if(wAccountEntity.getId() != principalId) {
@@ -180,19 +181,19 @@ public class AccountService {
 //		if(wAccountEntity.getPassword().equals(dto.getPassword()) == false) {
 //			throw new CustomRestfullException("출금 계좌 비밀번호가 틀렸습니다", HttpStatus.BAD_REQUEST);
 //		}
-		
+
 		// 4. 본인 계좌 잔액 확인
 		wAccountEntity.checkBalance(dto.getAmount());
 //		if(wAccountEntity.getBalance() < dto.getAmount()) {
 //			throw new CustomRestfullException("계좌 잔액이 부족합니다", HttpStatus.BAD_REQUEST);
 //		}
-		
+
 		// 5. 이체 처리 -> 출금계좌, 이체계좌
 		wAccountEntity.withdraw(dto.getAmount());
 		accountRepository.updateById(wAccountEntity);
 		dAccountEntity.deposit(dto.getAmount());
 		accountRepository.updateById(dAccountEntity);
-		
+
 		// 6. 거래 내역 등록(history) -> insert
 		History history = new History();
 		history.setAmount(dto.getAmount());
@@ -202,8 +203,33 @@ public class AccountService {
 		history.setDBalance(dAccountEntity.getBalance());
 		int resultRowCount = historyRepository.insert(history);
 		// ==========> 이체 내역
-		if(resultRowCount != 1) {
+		if (resultRowCount != 1) {
 			throw new CustomRestfullException("정상 처리가 되지 않았습니다", HttpStatus.BAD_REQUEST);
 		}
+	}
+
+	/*
+	 * 단일 계좌 조회
+	 * 
+	 * @param accountId
+	 * @return Account
+	 */
+	public Account findById(Integer accountId) {
+		Account accountEntity = accountRepository.findById(accountId);
+		if (accountEntity == null) {
+			throw new CustomRestfullException("해당 계좌를 찾을 수 없습니다", HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+		;
+		return accountEntity;
+	}
+
+	/*
+	 * @param type = [all, deposit, withdraw]
+	 * @param accountId
+	 * @return 입금내역, 출금내역, 입출금 내역(3가지 타입)
+	 */
+	public List<History> readHistoryListByAccount(String type, Integer accountId) {
+		List<History> historyEntity = historyRepository.findByIdAndDynamicType(type, accountId);
+		return historyEntity;
 	}
 }
