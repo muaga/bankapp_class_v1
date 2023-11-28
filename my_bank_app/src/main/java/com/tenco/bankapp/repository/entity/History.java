@@ -44,5 +44,4 @@ public class History {
 	public String formatCreatedAt(){
 		return TimeStampUtil.timestampToString(createdAt);
 	}
-	
 }
