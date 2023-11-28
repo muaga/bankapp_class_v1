@@ -1,6 +1,10 @@
 package com.tenco.bankapp.repository.entity;
 
 import java.sql.Timestamp;
+import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
+
+import com.tenco.bankapp.utils.TimeStampUtil;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -23,4 +27,21 @@ public class History {
 	private Integer wAccountId;
 	private Integer dAccountId;
 	private Timestamp createdAt;
+	
+	// 거래내역 정보 추가
+	private String sender;
+	private String receiver;
+	private Long balance;
+	
+	public String formatBalance(){
+		// data format를 사용하여 쉼표찍기
+		// 1,000원
+		DecimalFormat df = new DecimalFormat("###,###");
+		String formatMoney = df.format(balance);
+		return formatMoney;
+	}
+	
+	public String formatCreatedAt(){
+		return TimeStampUtil.timestampToString(createdAt);
+	}
 }

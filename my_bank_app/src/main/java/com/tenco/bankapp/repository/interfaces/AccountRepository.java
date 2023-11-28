@@ -25,6 +25,6 @@ public interface AccountRepository {
 	public List<Account> findByUserId(Integer principalId);
 
 	// 계좌번호로 계좌 조회
-	//	public Account findByNumber(String number);
+	public Account findByNumber(String number);
 
 }
