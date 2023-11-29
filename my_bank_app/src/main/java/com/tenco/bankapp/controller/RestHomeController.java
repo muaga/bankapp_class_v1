@@ -1,6 +1,8 @@
 package com.tenco.bankapp.controller;
 
 import java.net.URI;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -88,15 +90,19 @@ public class RestHomeController {
 //	    title: 'foo',
 //	    body: 'bar',
 //	    userId: 1
-		MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
+		// MultiValueMap<k, v> = {"title" : "[블로그 포스트1]"}
+		// 위의 형태로 하면 List 형식으로 등록이 된다.
+		// 그래서 key=value로 사용하려면.... 
+		
+		Map<String, String> params = new HashMap<>();
 		// JSON으로 구성하는 key=value를 추가할 수 있다
-		params.add("title", "블로그 포스트 1");
-		params.add("body", "후미진 어느 언덕에서 도시락 소풍");
-		params.add("userId", "1");
+		params.put("title", "블로그 포스트 1");
+		params.put("body", "후미진 어느 언덕에서 도시락 소풍");
+		params.put("userId", "1");
 		
 		// 3. HttpEntity 객체를 생성해서 Header와 결합 후 요청
 		// 헤더와 body의 결합
-		HttpEntity<MultiValueMap<String, String>> requestMessage 
+		HttpEntity<Map<String, String>> requestMessage 
 		= new HttpEntity<>(params, headers);
 		
 		// HTTP 요청 처리
