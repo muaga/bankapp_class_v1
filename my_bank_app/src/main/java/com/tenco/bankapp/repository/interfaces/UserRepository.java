@@ -27,6 +27,9 @@ public interface UserRepository {
 	
 	// 사용자의 이름과 비번으로 조회
 	public User findByUsernameAndPassword(SignInFormDto dto);
+	
+	// 사용자의 이름과 비번으로 조회
+	public User findByUsername(SignInFormDto dto);
 }
 
 //mapper 프레임워크

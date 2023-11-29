@@ -18,7 +18,6 @@
   <link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
-
 <div class="jumbotron text-center banner--img" style="margin-bottom:0">
   <h1>My Bank</h1>
   <p>코린이 은행 관리 시스템 입니다</p> 
@@ -52,13 +51,17 @@
     </ul>
   </div>  
 </nav>
-
 <div class="container" style="margin-top:30px">
   <div class="row">
     <div class="col-sm-4">
       <h2>About Me</h2>
       <h5>Photo of me:</h5>
-      <div class="m--profile"></div>
+                  <c:choose>
+            <c:when test="${principal != null}">
+            	<img alt="" class="m--profile" src="<c:url value="${principal.setUpUserImage()}"/>">
+            </c:when>
+            <c:otherwise><div class="m--profile"></div></c:otherwise>
+            </c:choose>
       <p>자라나는 코린이에 은행 관리 시스템</p>
       <h3>Some Links</h3>
       <p>Lorem ipsum dolor sit ame.</p>
