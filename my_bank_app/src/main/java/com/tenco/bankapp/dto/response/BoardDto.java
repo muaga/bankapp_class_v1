@@ -1,4 +1,4 @@
-package com.tenco.bankapp.dto;
+package com.tenco.bankapp.dto.response;
 
 import lombok.Data;
 

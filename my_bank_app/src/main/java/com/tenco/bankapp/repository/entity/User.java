@@ -8,8 +8,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 
-@AllArgsConstructor
-@NoArgsConstructor
+
 @Builder
 @Data
 public class User {
@@ -21,8 +20,12 @@ public class User {
 	private String originFileName;
 	private String uploadFileName;
 	private Timestamp createdAt;
+
 	
 	public String setUpUserImage() {
 		return uploadFileName == null ? "https://picsum.photos/id/1/350" : "/images/uploads/" + uploadFileName;
 	}
+	
+	
+	
 }

@@ -28,8 +28,8 @@ public interface UserRepository {
 	// 사용자의 이름과 비번으로 조회
 	public User findByUsernameAndPassword(SignInFormDto dto);
 	
-	// 사용자의 이름과 비번으로 조회
-	public User findByUsername(SignInFormDto dto);
+	// 사용자의 이름으로 조회
+	public User findByUsername(String username);
 }
 
 //mapper 프레임워크
